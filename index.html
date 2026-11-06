@@ -56,6 +56,21 @@
  .hero-media img,.hero h1,.hero-aside{animation:none}
  .btn-primary,.btn-link:after{transition:none}
 }
+
+/* ───────── Variants, bag, size guide ───────── */
+.name-btn{border:0;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;color:inherit}.name-btn:hover{text-decoration:underline;text-underline-offset:3px}
+.pdp-top{display:grid;grid-template-columns:96px 1fr;gap:14px;margin-bottom:26px}.pdp-top img{width:96px;height:124px;object-fit:cover;background:#e9e8e3}.pdp-name{font:22px var(--serif);font-weight:400;letter-spacing:-.02em;margin:0 0 8px}
+.opt{margin:0 0 24px}.opt-head{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:10px}.opt-head b{font-weight:500}.opt-head .link{border:0;background:none;text-decoration:underline;font-size:10px;color:var(--muted);padding:0}
+.opt-row{display:flex;flex-wrap:wrap;gap:8px}
+.size-btn{min-width:48px;height:42px;padding:0 10px;border:1px solid var(--line);background:transparent;font-size:11px}.color-btn{display:flex;align-items:center;gap:8px;height:42px;padding:0 14px 0 11px;border:1px solid var(--line);background:transparent;font-size:11px}.color-btn i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.14)}
+.size-btn:hover,.color-btn:hover{border-color:#aaa8a1}.color-btn.on{border-color:var(--ink)}.size-btn.on{background:var(--ink);border-color:var(--ink);color:#f8f7f3}
+.size-btn[aria-disabled=true],.color-btn[aria-disabled=true]{opacity:.38;text-decoration:line-through;cursor:not-allowed}
+.size-btn:focus-visible,.color-btn:focus-visible,.qty button:focus-visible,.name-btn:focus-visible,.swatch:focus-visible,.checkout:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line)}.qty button{width:36px;height:34px;border:0;background:none;font-size:15px}.qty span{min-width:30px;text-align:center;font-size:11px}
+.guide{display:none;margin-top:14px}.guide.open{display:block}.guide table{width:100%;border-collapse:collapse;font-size:10px}.guide th,.guide td{border-bottom:1px solid var(--line);padding:8px 4px;text-align:left;font-weight:400}.guide th{color:var(--muted)}
+.err{color:#9a3b2e;font-size:11px;line-height:1.5;min-height:17px;margin:0 0 10px}
+.cart-price{text-align:right;font-size:11px;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.checkout{cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}.checkout:disabled{opacity:.4;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -131,50 +146,105 @@
 <aside class="drawer" id="cartDrawer" aria-label="Shopping bag">
   <div class="drawer-head"><h2>Your bag <span class="count" id="drawerCount">(0)</span></h2><button class="close" onclick="closeDrawers()" aria-label="Close">×</button></div>
   <div class="drawer-content" id="cartContent"></div>
-  <div class="drawer-foot"><div class="subtotal"><span>Subtotal</span><strong id="subtotal">£0</strong></div><button class="checkout" onclick="alert('Demo only — Shopify checkout will be connected later.')">Continue to checkout</button><p class="note">Shipping and taxes calculated at checkout. This is a visual prototype; no real orders or payments are processed.</p></div>
+  <div class="drawer-foot"><div class="subtotal"><span>Subtotal</span><strong id="subtotal">£0</strong></div><button class="checkout" id="checkoutBtn" onclick="goCheckout()">Continue to checkout</button><p class="note">Shipping, discounts and taxes are calculated at checkout. Demo store: no real orders or payments are processed.</p></div>
+</aside>
+<aside class="drawer" id="pdpDrawer" aria-label="Select options">
+  <div class="drawer-head"><h2>Select options</h2><button class="close" onclick="closeDrawers()" aria-label="Close">×</button></div>
+  <div class="drawer-content" id="pdpContent"></div>
+  <div class="drawer-foot"><p class="err" id="pdpErr" role="alert"></p><button class="checkout" onclick="addSelected()">Add to bag</button></div>
 </aside>
 <script>
+const AP=["XS","S","M","L","XL","XXL"],SH=["UK 6","UK 7","UK 8","UK 9","UK 10","UK 11"];
+const C=(n,h)=>({n,h});
 const products=[
-{id:1,name:"The Essential Tee",category:"Men",price:38,old:48,rating:4.8,reviews:124,color:["#e8e5de","#252522","#8b9b91"],tag:"New in",img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85"},
-{id:2,name:"Relaxed Cotton Shirt",category:"Women",price:64,old:null,rating:4.9,reviews:86,color:["#e8e5de","#b7a58f"],tag:"New in",img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=85"},
-{id:3,name:"Everyday Overshirt",category:"Men",price:78,old:null,rating:4.7,reviews:92,color:["#8b9b91","#b66e50","#ded8cc"],tag:"",img:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=900&q=85"},
-{id:4,name:"The Modern Trouser",category:"Women",price:92,old:115,rating:4.8,reviews:71,color:["#292a28","#c5b9a8"],tag:"Sale",img:"https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=900&q=85"},
-{id:5,name:"Relaxed Weekend Set",category:"Men",price:88,old:null,rating:4.6,reviews:58,color:["#d7c9b8","#77776d"],tag:"",img:"https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=900&q=85"},
-{id:6,name:"Sculpted Everyday Top",category:"Women",price:45,old:null,rating:4.9,reviews:103,color:["#242522","#eeeae2"],tag:"New in",img:"https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85"},
-{id:7,name:"Canvas Carryall",category:"Accessories",price:32,old:null,rating:4.7,reviews:44,color:["#b6a58d","#34352f"],tag:"",img:"https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85"},
-{id:8,name:"Minimal Leather Sneaker",category:"Accessories",price:110,old:null,rating:4.8,reviews:67,color:["#e8e5de","#b8b3a9"],tag:"",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85"}
+{id:1,name:"The Essential Tee",category:"Men",price:38,old:48,rating:4.8,reviews:124,tag:"New in",img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85",sizes:AP,colors:[C("Bone","#e8e5de"),C("Black","#252522"),C("Sage","#8b9b91")],out:["XL|Black","XS|Sage","XXL|Bone","XXL|Black"]},
+{id:2,name:"Relaxed Cotton Shirt",category:"Women",price:64,old:null,rating:4.9,reviews:86,tag:"New in",img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(0,5),colors:[C("Bone","#e8e5de"),C("Sand","#b7a58f")],out:["M|Sand","XS|Bone"]},
+{id:3,name:"Everyday Overshirt",category:"Men",price:78,old:null,rating:4.7,reviews:92,tag:"",img:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(1),colors:[C("Sage","#8b9b91"),C("Rust","#b66e50"),C("Stone","#ded8cc")],out:["S|Rust","XXL|Rust","M|Stone"]},
+{id:4,name:"The Modern Trouser",category:"Women",price:92,old:115,rating:4.8,reviews:71,tag:"Sale",img:"https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(0,5),colors:[C("Black","#292a28"),C("Taupe","#c5b9a8")],out:["XS|Black","L|Taupe"]},
+{id:5,name:"Relaxed Weekend Set",category:"Men",price:88,old:null,rating:4.6,reviews:58,tag:"",img:"https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(1),colors:[C("Oat","#d7c9b8"),C("Olive","#77776d")],out:["L|Oat","S|Olive"]},
+{id:6,name:"Sculpted Everyday Top",category:"Women",price:45,old:null,rating:4.9,reviews:103,tag:"New in",img:"https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(0,4),colors:[C("Black","#242522"),C("Ivory","#eeeae2")],out:["S|Ivory"]},
+{id:7,name:"Canvas Carryall",category:"Accessories",price:32,old:null,rating:4.7,reviews:44,tag:"",img:"https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85",sizes:[],colors:[C("Tan","#b6a58d"),C("Charcoal","#34352f")],out:[]},
+{id:8,name:"Minimal Leather Sneaker",category:"Accessories",price:110,old:null,rating:4.8,reviews:67,tag:"",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",sizes:SH,colors:[C("Bone","#e8e5de"),C("Greige","#b8b3a9")],out:["UK 8|Bone","UK 11|Greige"]}
 ];
-let category="All",wishlist=new Set(),cart=[];
+const LS="studio01_cart_v1",MAXQ=10;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money=n=>"£"+n.toFixed(0);
+const prod=id=>products.find(p=>p.id===id);
+function loadCart(){try{const a=JSON.parse(localStorage.getItem(LS)||"[]");return Array.isArray(a)?a.filter(x=>x&&x.key&&x.qty>0&&isFinite(x.price)):[]}catch(e){return[]}}
+function saveCart(){try{localStorage.setItem(LS,JSON.stringify(cart))}catch(e){}}
+let category="All",wishlist=new Set(),cart=loadCart(),sel={id:null,size:null,color:null,qty:1};
+
+/* ---------- Product grid ---------- */
 function renderProducts(){
  let list=products.filter(p=>(category==="All"||p.category===category));
- const q=(document.getElementById("searchInput")?.value||"").toLowerCase();
+ const q=($("searchInput")?.value||"").toLowerCase();
  if(q)list=list.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q));
  const checks=[...document.querySelectorAll('#filterPanel input[type="checkbox"]:checked')].map(x=>x.value);
  if(checks.includes("New in"))list=list.filter(p=>p.tag==="New in");
  if(checks.includes("Sale"))list=list.filter(p=>p.old);
- const sort=document.getElementById("sortSelect")?.value||"featured";
+ const sort=$("sortSelect")?.value||"featured";
  if(sort==="low")list.sort((a,b)=>a.price-b.price);if(sort==="high")list.sort((a,b)=>b.price-a.price);
- const grid=document.getElementById("productGrid");
+ const grid=$("productGrid");
  if(!list.length){grid.innerHTML='<div class="empty">No pieces found. Try another search or category.</div>';return}
  grid.innerHTML=list.map(p=>`<article class="product">
- <div class="photo-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy">${p.old?'<span class="tag">-'+Math.round((1-p.price/p.old)*100)+'%</span>':p.tag==='New in'?'<span class="tag">New in</span>':''}
- <button class="wish ${wishlist.has(p.id)?'selected':''}" aria-label="Add ${p.name} to wishlist" onclick="toggleWish(${p.id})"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.3 4.3 0 0 1 12 6.5a4.3 4.3 0 0 1 8.8 2.3Z"/></svg></button>
- <button class="quick-add" onclick="addToBag(${p.id})">Quick add +</button></div>
- <div class="product-meta"><div class="rating">★★★★★ <span>(${p.reviews})</span></div><p class="product-name">${p.name}</p><p class="price">${money(p.price)} ${p.old?`<del style="color:#999;margin-left:5px">${money(p.old)}</del>`:""}</p>
- <div class="swatches">${p.color.map(c=>`<button class="swatch" style="background:${c}" aria-label="Color option"></button>`).join("")}</div></div></article>`).join("");
+ <div class="photo-wrap"><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" style="cursor:pointer" onclick="openProduct(${p.id})">${p.old?'<span class="tag">-'+Math.round((1-p.price/p.old)*100)+'%</span>':p.tag==='New in'?'<span class="tag">New in</span>':''}
+ <button class="wish ${wishlist.has(p.id)?'selected':''}" aria-label="Add ${esc(p.name)} to wishlist" onclick="toggleWish(${p.id})"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.3 4.3 0 0 1 12 6.5a4.3 4.3 0 0 1 8.8 2.3Z"/></svg></button>
+ <button class="quick-add" onclick="openProduct(${p.id})">Select options +</button></div>
+ <div class="product-meta"><div class="rating">★★★★★ <span>(${p.reviews})</span></div><p class="product-name"><button type="button" class="name-btn" onclick="openProduct(${p.id})">${esc(p.name)}</button></p><p class="price">${money(p.price)} ${p.old?`<del style="color:#999;margin-left:5px">${money(p.old)}</del>`:""}</p>
+ <div class="swatches">${p.colors.map((c,i)=>`<button class="swatch" style="background:${c.h}" aria-label="${esc(p.name)} in ${c.n}" title="${c.n}" onclick="openProduct(${p.id},${i})"></button>`).join("")}</div></div></article>`).join("");
 }
 function setCategory(c,el){category=c;document.querySelectorAll(".category").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderProducts()}
-function toggleWish(id){wishlist.has(id)?wishlist.delete(id):wishlist.add(id);document.getElementById("wishCount").textContent=`(${wishlist.size})`;renderProducts()}
-function showWishlist(){category="All";document.querySelectorAll(".category").forEach(x=>x.classList.toggle("active",x.dataset.category==="All"));const grid=document.getElementById("productGrid");const list=products.filter(p=>wishlist.has(p.id));grid.innerHTML=list.length?list.map(p=>`<article class="product"><div class="photo-wrap"><img src="${p.img}" alt="${p.name}"><button class="wish selected" onclick="toggleWish(${p.id})">♥</button><button class="quick-add" style="opacity:1;transform:none" onclick="addToBag(${p.id})">Quick add +</button></div><div class="product-meta"><p class="product-name">${p.name}</p><p class="price">${money(p.price)}</p></div></article>`).join(""):'<div class="empty">Your wishlist is waiting for its first favourite.</div>';window.scrollTo({top:0,behavior:"smooth"})}
-function addToBag(id){const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});updateCart();openCart()}
-function removeFromBag(id){cart=cart.filter(x=>x.id!==id);updateCart()}
-function updateCart(){const count=cart.reduce((s,x)=>s+x.qty,0),total=cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0);document.getElementById("bagCount").textContent=`(${count})`;document.getElementById("drawerCount").textContent=`(${count})`;document.getElementById("subtotal").textContent=money(total);document.getElementById("cartContent").innerHTML=cart.length?cart.map(x=>{const p=products.find(z=>z.id===x.id);return `<div class="cart-row"><img src="${p.img}" alt=""><div><p>${p.name}</p><small>Qty ${x.qty} · ${money(p.price)}</small></div><button class="remove" onclick="removeFromBag(${p.id})">Remove</button></div>`}).join(""):'<div class="empty">Your bag is currently empty.</div>'}
-function openCart(){document.getElementById("cartDrawer").classList.add("open");document.getElementById("backdrop").classList.add("open")}
-function closeDrawers(){document.getElementById("cartDrawer").classList.remove("open");document.getElementById("backdrop").classList.remove("open")}
-function toggleFilters(){document.getElementById("filterPanel").classList.toggle("open")}
-function toggleSort(){document.getElementById("filterPanel").classList.add("open");document.getElementById("sortSelect").focus()}
-function toggleSearch(){document.getElementById("searchPanel").classList.toggle("open");if(document.getElementById("searchPanel").classList.contains("open"))document.getElementById("searchInput").focus();else{document.getElementById("searchInput").value="";renderProducts()}}
+function toggleWish(id){wishlist.has(id)?wishlist.delete(id):wishlist.add(id);$("wishCount").textContent=`(${wishlist.size})`;renderProducts()}
+function showWishlist(){category="All";document.querySelectorAll(".category").forEach(x=>x.classList.toggle("active",x.dataset.category==="All"));const grid=$("productGrid");const list=products.filter(p=>wishlist.has(p.id));grid.innerHTML=list.length?list.map(p=>`<article class="product"><div class="photo-wrap"><img src="${p.img}" alt="${esc(p.name)}" style="cursor:pointer" onclick="openProduct(${p.id})"><button class="wish selected" aria-label="Remove ${esc(p.name)} from wishlist" onclick="toggleWish(${p.id})">♥</button><button class="quick-add" style="opacity:1;transform:none" onclick="openProduct(${p.id})">Select options +</button></div><div class="product-meta"><p class="product-name">${esc(p.name)}</p><p class="price">${money(p.price)}</p></div></article>`).join(""):'<div class="empty">Your wishlist is waiting for its first favourite.</div>';window.scrollTo({top:0,behavior:"smooth"})}
+
+/* ---------- Product options (variants) ---------- */
+const out=(p,s,c)=>p.out.includes(s+"|"+c);
+const sizeOff=(p,s)=>sel.color?out(p,s,sel.color):p.colors.every(c=>out(p,s,c.n));
+const colorOff=(p,c)=>sel.size?out(p,sel.size,c):(p.sizes.length>0&&p.sizes.every(s=>out(p,s,c)));
+const FL=["24.5","25.4","26.2","27.1","27.9","28.8"];
+const GUIDE_A=[["XS","84–89","70–75"],["S","90–95","76–81"],["M","96–101","82–87"],["L","102–107","88–93"],["XL","108–115","94–101"],["XXL","116–123","102–109"]];
+function guideHTML(p){return p.sizes[0]&&p.sizes[0].startsWith("UK")
+ ?`<table><tr><th>Size</th><th>EU (approx.)</th><th>Foot length</th></tr>${p.sizes.map((s,i)=>`<tr><td>${s}</td><td>${39+i}</td><td>${FL[i]} cm</td></tr>`).join("")}</table>`
+ :`<table><tr><th>Size</th><th>Chest (cm)</th><th>Waist (cm)</th></tr>${GUIDE_A.filter(r=>p.sizes.includes(r[0])).map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</table><p class="note">Body measurements. Between sizes? Size up for a relaxed fit.</p>`}
+function renderPDP(keepGuide){
+ const p=prod(sel.id),open=keepGuide&&$("guide")?.classList.contains("open");
+ $("pdpContent").innerHTML=`<div class="pdp-top"><img src="${p.img}" alt="${esc(p.name)}"><div><h3 class="pdp-name">${esc(p.name)}</h3><p class="price">${money(p.price)} ${p.old?`<del style="color:#999;margin-left:5px">${money(p.old)}</del>`:""}</p></div></div>
+ <div class="opt"><div class="opt-head"><span>Colour: <b>${sel.color||"Select a colour"}</b></span></div><div class="opt-row" role="group" aria-label="Colour">${p.colors.map(c=>{const off=colorOff(p,c.n);return `<button type="button" class="color-btn ${sel.color===c.n?"on":""}" aria-pressed="${sel.color===c.n}" ${off?'aria-disabled="true" title="Sold out in this size"':""} onclick="pickColor('${c.n}')"><i style="background:${c.h}"></i>${c.n}</button>`}).join("")}</div></div>
+ ${p.sizes.length?`<div class="opt"><div class="opt-head"><span>Size: <b>${sel.size||"Select a size"}</b></span><button type="button" class="link" aria-expanded="${!!open}" onclick="toggleGuide(this)">Size guide</button></div><div class="opt-row" role="group" aria-label="Size">${p.sizes.map(s=>{const off=sizeOff(p,s);return `<button type="button" class="size-btn ${sel.size===s?"on":""}" aria-pressed="${sel.size===s}" ${off?'aria-disabled="true" title="Sold out in this colour"':""} onclick="pickSize('${s}')">${s}</button>`}).join("")}</div><div class="guide ${open?"open":""}" id="guide">${guideHTML(p)}</div></div>`:`<div class="opt"><div class="opt-head"><span>Size: <b>One size</b></span></div></div>`}
+ <div class="opt"><div class="opt-head"><span>Quantity</span></div><div class="qty"><button type="button" aria-label="Decrease quantity" onclick="pdpQty(-1)">−</button><span aria-live="polite">${sel.qty}</span><button type="button" aria-label="Increase quantity" onclick="pdpQty(1)">+</button></div></div>`;
+ $("pdpErr").textContent="";
+}
+function openProduct(id,ci){const p=prod(id);sel={id,size:null,color:ci!=null?p.colors[ci].n:null,qty:1};renderPDP();closeDrawers();$("pdpDrawer").classList.add("open");$("backdrop").classList.add("open");$("pdpDrawer").querySelector(".close").focus()}
+function pickColor(c){const p=prod(sel.id);if(colorOff(p,c))return;sel.color=c;renderPDP(true)}
+function pickSize(s){const p=prod(sel.id);if(sizeOff(p,s))return;sel.size=s;renderPDP(true)}
+function pdpQty(d){sel.qty=Math.min(MAXQ,Math.max(1,sel.qty+d));renderPDP(true)}
+function toggleGuide(b){const g=$("guide");g.classList.toggle("open");b.setAttribute("aria-expanded",g.classList.contains("open"))}
+function addSelected(){
+ const p=prod(sel.id),miss=[];if(!sel.color)miss.push("a colour");if(p.sizes.length&&!sel.size)miss.push("a size");
+ if(miss.length){$("pdpErr").textContent="Please select "+miss.join(" and ")+" before adding to your bag.";return}
+ const size=p.sizes.length?sel.size:"One size",key=[p.id,size,sel.color].join("|"),line=cart.find(x=>x.key===key);
+ if(line)line.qty=Math.min(MAXQ,line.qty+sel.qty);else cart.push({key,id:p.id,name:p.name,price:p.price,img:p.img,size,color:sel.color,qty:sel.qty});
+ saveCart();updateCart();openCart();
+}
+
+/* ---------- Bag ---------- */
+function changeQty(key,d){const l=cart.find(x=>x.key===key);if(!l)return;l.qty=Math.min(MAXQ,Math.max(1,l.qty+d));saveCart();updateCart()}
+function removeFromBag(key){cart=cart.filter(x=>x.key!==key);saveCart();updateCart()}
+function updateCart(){
+ const count=cart.reduce((s,x)=>s+x.qty,0),total=cart.reduce((s,x)=>s+x.price*x.qty,0);
+ $("bagCount").textContent=`(${count})`;$("drawerCount").textContent=`(${count})`;$("subtotal").textContent=money(total);$("checkoutBtn").disabled=!cart.length;
+ $("cartContent").innerHTML=cart.length?cart.map(x=>{const k=esc(x.key);return `<div class="cart-row"><img src="${esc(x.img)}" alt=""><div><p>${esc(x.name)}</p><small>${x.size==="One size"?"One size":"Size "+esc(x.size)} · ${esc(x.color)}</small><div class="qty" style="margin-top:10px"><button type="button" aria-label="Decrease quantity of ${esc(x.name)}" onclick="changeQty('${k}',-1)">−</button><span>${x.qty}</span><button type="button" aria-label="Increase quantity of ${esc(x.name)}" onclick="changeQty('${k}',1)">+</button></div></div><div class="cart-price"><span>${money(x.price*x.qty)}</span><button class="remove" onclick="removeFromBag('${k}')" aria-label="Remove ${esc(x.name)}">Remove</button></div></div>`}).join(""):'<div class="empty">Your bag is currently empty.</div>';
+}
+function goCheckout(){if(!cart.length)return;saveCart();location.href="checkout.html"}
+function openCart(){closeDrawers();$("cartDrawer").classList.add("open");$("backdrop").classList.add("open")}
+function closeDrawers(){["cartDrawer","pdpDrawer"].forEach(i=>$(i).classList.remove("open"));$("backdrop").classList.remove("open")}
+function toggleFilters(){$("filterPanel").classList.toggle("open")}
+function toggleSort(){$("filterPanel").classList.add("open");$("sortSelect").focus()}
+function toggleSearch(){$("searchPanel").classList.toggle("open");if($("searchPanel").classList.contains("open"))$("searchInput").focus();else{$("searchInput").value="";renderProducts()}}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawers()});
+window.addEventListener("storage",e=>{if(e.key===LS){cart=loadCart();updateCart()}});
+window.addEventListener("pageshow",()=>{cart=loadCart();updateCart()});
 renderProducts();updateCart();
 </script>
 </body>
