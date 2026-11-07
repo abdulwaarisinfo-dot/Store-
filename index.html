@@ -197,7 +197,7 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
 <div class="drawer-backdrop" id="backdrop" onclick="closeDrawers()"></div>
 <aside class="drawer left" id="navDrawer" role="dialog" aria-modal="true" aria-label="Menu">
   <div class="drawer-head"><h2>Menu</h2><button class="close" onclick="closeDrawers()" aria-label="Close menu">×</button></div>
-  <nav class="drawer-content mnav"><a href="#shop" onclick="closeDrawers()">Shop</a><a href="collection.html?c=Men">Men</a><a href="collection.html?c=Women">Women</a><a href="collection.html?c=Accessories">Accessories</a><a href="info.html#about">About</a><button onclick="closeDrawers();showWishlist()">Wishlist</button></nav>
+  <nav class="drawer-content mnav"><a href="#shop" onclick="closeDrawers()">Shop</a><a href="collection.html?c=Men">Men</a><a href="collection.html?c=Women">Women</a><a href="collection.html?c=Accessories">Accessories</a><a href="info.html#about">About</a><button onclick="closeDrawers();toggleSearch()">Search</button><button onclick="closeDrawers();showWishlist()">Wishlist</button></nav>
 </aside>
 <aside class="drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Shopping bag">
   <div class="drawer-head"><h2>Your bag <span class="count" id="drawerCount">(0)</span></h2><button class="close" onclick="closeDrawers()" aria-label="Close bag">×</button></div>
@@ -226,7 +226,7 @@ let wishlist=new Set((()=>{try{const a=JSON.parse(localStorage.getItem(WL)||"[]"
 function renderProducts(){
  let list=products.filter(p=>(category==="All"||p.category===category)&&(!wishOnly||wishlist.has(p.id)));
  const q=($("searchInput")?.value||"").toLowerCase();
- if(q)list=list.filter(p=>p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q));
+ if(q.trim())list=list.filter(p=>searchMatch(p,q));
  const checks=[...document.querySelectorAll('#filterPanel input[type="checkbox"]:checked')].map(x=>x.value);
  if(checks.includes("New in"))list=list.filter(p=>p.tag==="New in");
  if(checks.includes("Sale"))list=list.filter(p=>p.old);
