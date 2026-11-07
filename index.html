@@ -71,6 +71,7 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
 .section-head{flex-direction:column;align-items:flex-start;gap:10px;padding:64px 0 20px}.collections{gap:8px;align-items:start}.coll small{display:none}.coll span{font-size:16px}.toolbar{flex-wrap:wrap;gap:12px}.categories{width:100%;gap:22px}.tools{width:100%}.tool-btn{width:100%;white-space:nowrap}.hero{padding-top:12px}.hero-media{aspect-ratio:4/4.1}.hero-actions{flex-direction:column;align-items:stretch;gap:8px}.hero-actions .btn-link{align-self:center;padding:12px}}
 
 /* ---------- Readability and structure polish ---------- */
+.coll{display:block;color:inherit;text-decoration:none}.name-btn{color:inherit;text-decoration:none}.nav-left{gap:24px}
 .hero-statement{font-size:16px;line-height:1.7}.section-head p{font-size:15px}
 .services{max-width:1600px;margin:0 auto;padding:0 var(--gutter)}
 .services>div{display:flex;justify-content:space-between;align-items:center;gap:20px 48px;flex-wrap:wrap;margin-top:64px;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -119,7 +120,7 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
 <a class="skip" href="#shop">Skip to products</a>
 <div class="announcement">Complimentary shipping on orders over £100</div>
 <header class="header">
-  <div class="nav-left"><a class="nav-link" href="#shop">Shop</a><a class="nav-link" href="#collections">Collections</a><a class="nav-link" href="info.html#about">About</a></div>
+  <div class="nav-left"><a class="nav-link" href="collection.html?c=Men">Men</a><a class="nav-link" href="collection.html?c=Women">Women</a><a class="nav-link" href="collection.html?c=Accessories">Accessories</a><a class="nav-link" href="info.html#about">About</a></div>
   <button class="icon-btn" aria-label="Open menu" aria-controls="navDrawer" onclick="openDrawer('navDrawer')"><svg viewBox="0 0 24 24"><path d="M3 8h18M3 16h18"/></svg></button>
   <a class="brand" href="index.html">STUDIO 01</a>
   <div class="nav-right">
@@ -154,9 +155,9 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
 <section class="section" id="collections" aria-labelledby="collH">
   <div class="section-head"><h2 id="collH">Collections</h2><p>Menswear, womenswear and accessories from Collection 01.</p></div>
   <div class="collections">
-    <button class="coll" onclick="pickCategory('Men')"><div><img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Men</span><small data-cat="Men">View menswear</small></button>
-    <button class="coll" onclick="pickCategory('Women')"><div><img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Women</span><small data-cat="Women">View womenswear</small></button>
-    <button class="coll" onclick="pickCategory('Accessories')"><div><img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Accessories</span><small data-cat="Accessories">View accessories</small></button>
+    <a class="coll" href="collection.html?c=Men"><div><img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Men</span><small data-cat="Men">View menswear</small></a>
+    <a class="coll" href="collection.html?c=Women"><div><img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Women</span><small data-cat="Women">View womenswear</small></a>
+    <a class="coll" href="collection.html?c=Accessories"><div><img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Accessories</span><small data-cat="Accessories">View accessories</small></a>
   </div>
 </section>
 
@@ -186,7 +187,7 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
 <footer class="footer">
   <div class="footer-grid">
     <div><a class="brand" href="index.html">STUDIO 01</a><p class="footer-about">Considered everyday clothing in natural, neutral tones. A small collection, made to be worn often.</p></div>
-    <div><h3>Shop</h3><ul><li><a href="index.html#shop">All products</a></li><li><a href="index.html?c=Men#shop">Men</a></li><li><a href="index.html?c=Women#shop">Women</a></li><li><a href="index.html?c=Accessories#shop">Accessories</a></li></ul></div>
+    <div><h3>Shop</h3><ul><li><a href="collection.html?c=All">All products</a></li><li><a href="collection.html?c=Men">Men</a></li><li><a href="collection.html?c=Women">Women</a></li><li><a href="collection.html?c=Accessories">Accessories</a></li></ul></div>
     <div><h3>Support</h3><ul><li><a href="info.html#shipping">Shipping and returns</a></li><li><a href="info.html#contact">Contact</a></li></ul></div>
     <div><h3>Studio 01</h3><ul><li><a href="info.html#about">About</a></li><li><a href="info.html#privacy">Privacy policy</a></li><li><a href="info.html#terms">Terms and conditions</a></li></ul></div>
   </div>
@@ -196,7 +197,7 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
 <div class="drawer-backdrop" id="backdrop" onclick="closeDrawers()"></div>
 <aside class="drawer left" id="navDrawer" role="dialog" aria-modal="true" aria-label="Menu">
   <div class="drawer-head"><h2>Menu</h2><button class="close" onclick="closeDrawers()" aria-label="Close menu">×</button></div>
-  <nav class="drawer-content mnav"><a href="#shop" onclick="closeDrawers()">Shop</a><a href="#collections" onclick="closeDrawers()">Collections</a><a href="info.html#about">About</a><button onclick="closeDrawers();showWishlist()">Wishlist</button></nav>
+  <nav class="drawer-content mnav"><a href="#shop" onclick="closeDrawers()">Shop</a><a href="collection.html?c=Men">Men</a><a href="collection.html?c=Women">Women</a><a href="collection.html?c=Accessories">Accessories</a><a href="info.html#about">About</a><button onclick="closeDrawers();showWishlist()">Wishlist</button></nav>
 </aside>
 <aside class="drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Shopping bag">
   <div class="drawer-head"><h2>Your bag <span class="count" id="drawerCount">(0)</span></h2><button class="close" onclick="closeDrawers()" aria-label="Close bag">×</button></div>
@@ -208,19 +209,8 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
   <div class="drawer-content" id="pdpContent"></div>
   <div class="drawer-foot"><p class="err" id="pdpErr" role="alert"></p><button class="checkout" onclick="addSelected()">Add to bag</button></div>
 </aside>
+<script src="data.js"></script>
 <script>
-const AP=["XS","S","M","L","XL","XXL"],SH=["UK 6","UK 7","UK 8","UK 9","UK 10","UK 11"];
-const C=(n,h)=>({n,h});
-const products=[
-{id:1,name:"The Essential Tee",category:"Men",price:38,old:48,rating:4.8,reviews:124,tag:"New in",img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85",sizes:AP,colors:[C("Bone","#e8e5de"),C("Black","#252522"),C("Sage","#8b9b91")],out:["XL|Black","XS|Sage","XXL|Bone","XXL|Black"]},
-{id:2,name:"Relaxed Cotton Shirt",category:"Women",price:64,old:null,rating:4.9,reviews:86,tag:"New in",img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(0,5),colors:[C("Bone","#e8e5de"),C("Sand","#b7a58f")],out:["M|Sand","XS|Bone"]},
-{id:3,name:"Everyday Overshirt",category:"Men",price:78,old:null,rating:4.7,reviews:92,tag:"",img:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(1),colors:[C("Sage","#8b9b91"),C("Rust","#b66e50"),C("Stone","#ded8cc")],out:["S|Rust","XXL|Rust","M|Stone"]},
-{id:4,name:"The Modern Trouser",category:"Women",price:92,old:115,rating:4.8,reviews:71,tag:"Sale",img:"https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(0,5),colors:[C("Black","#292a28"),C("Taupe","#c5b9a8")],out:["XS|Black","L|Taupe"]},
-{id:5,name:"Relaxed Weekend Set",category:"Men",price:88,old:null,rating:4.6,reviews:58,tag:"",img:"https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(1),colors:[C("Oat","#d7c9b8"),C("Olive","#77776d")],out:["L|Oat","S|Olive"]},
-{id:6,name:"Sculpted Everyday Top",category:"Women",price:45,old:null,rating:4.9,reviews:103,tag:"New in",img:"https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85",sizes:AP.slice(0,4),colors:[C("Black","#242522"),C("Ivory","#eeeae2")],out:["S|Ivory"]},
-{id:7,name:"Canvas Carryall",category:"Accessories",price:32,old:null,rating:4.7,reviews:44,tag:"",img:"https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85",sizes:[],colors:[C("Tan","#b6a58d"),C("Charcoal","#34352f")],out:[]},
-{id:8,name:"Minimal Leather Sneaker",category:"Accessories",price:110,old:null,rating:4.8,reviews:67,tag:"",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",sizes:SH,colors:[C("Bone","#e8e5de"),C("Greige","#b8b3a9")],out:["UK 8|Bone","UK 11|Greige"]}
-];
 document.querySelectorAll(".coll small[data-cat]").forEach(el=>{const n=products.filter(p=>p.category===el.dataset.cat).length;el.textContent=n+(n===1?" piece":" pieces")});
 const LS="studio01_cart_v1",MAXQ=10;
 const $=id=>document.getElementById(id);
@@ -246,10 +236,10 @@ function renderProducts(){
  const grid=$("productGrid");
  if(!list.length){grid.innerHTML=wishOnly?'<div class="empty">Your wishlist is empty. Use the heart on any product to save it.</div>':'<div class="empty">No pieces found. Try another search or category.</div>';return}
  grid.innerHTML=list.map(p=>`<article class="product">
- <div class="photo-wrap"><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" decoding="async" onclick="openProduct(${p.id})">${p.old?'<span class="tag">-'+Math.round((1-p.price/p.old)*100)+'%</span>':p.tag==='New in'?'<span class="tag">New in</span>':''}
+ <div class="photo-wrap"><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" decoding="async" onclick="location.href='product.html?id=${p.id}'">${p.old?'<span class="tag">-'+Math.round((1-p.price/p.old)*100)+'%</span>':p.tag==='New in'?'<span class="tag">New in</span>':''}
  <button class="wish ${wishlist.has(p.id)?'selected':''}" aria-label="Add ${esc(p.name)} to wishlist" onclick="toggleWish(${p.id})"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.3 4.3 0 0 1 12 6.5a4.3 4.3 0 0 1 8.8 2.3Z"/></svg></button>
  <button class="quick-add" aria-label="Select options for ${esc(p.name)}" onclick="openProduct(${p.id})">Select options +</button></div>
- <div class="product-meta"><div class="rating">★ ${p.rating.toFixed(1)} <span>(${p.reviews})</span></div><p class="product-name"><button type="button" class="name-btn" onclick="openProduct(${p.id})">${esc(p.name)}</button></p><p class="price">${money(p.price)} ${p.old?`<del class="was">${money(p.old)}</del>`:""}</p>
+ <div class="product-meta"><div class="rating">★ ${p.rating.toFixed(1)} <span>(${p.reviews})</span></div><p class="product-name"><a class="name-btn" href="product.html?id=${p.id}">${esc(p.name)}</a></p><p class="price">${money(p.price)} ${p.old?`<del class="was">${money(p.old)}</del>`:""}</p>
  <div class="swatches">${p.colors.map((c,i)=>`<button class="swatch" style="background:${c.h}" aria-label="${esc(p.name)} in ${c.n}" title="${c.n}" onclick="openProduct(${p.id},${i})"></button>`).join("")}</div></div></article>`).join("");
 }
 function setCategory(c,el){category=c;wishOnly=false;syncWish();document.querySelectorAll(".category").forEach(x=>x.classList.toggle("active",x.dataset.category===c));renderProducts()}
