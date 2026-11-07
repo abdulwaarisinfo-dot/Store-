@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#f4f3ef">
 <meta name="robots" content="noindex">
 <title>Checkout — STUDIO 01</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23171715'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23f4f3ef' font-family='Georgia,serif'%3E01%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 <style>
 body{display:flex;flex-direction:column;min-height:100vh}.announcement,.header,.footer-slim{flex:none}
@@ -42,6 +43,17 @@ input:focus,select:focus{border-color:var(--ink)}input[aria-invalid=true],select
 @media(max-width:1100px){.row3{grid-template-columns:1fr 1fr}.row3 .field:first-child{grid-column:1/-1}}
 @media(max-width:960px){.title{padding:48px 0 36px}.layout{grid-template-columns:1fr}.summary{order:-1;position:static;padding:28px 24px}}
 @media(max-width:620px){.wrap{padding-bottom:72px}.title{padding:36px 0 28px}.title h1{font-size:40px}.row,.row3{grid-template-columns:1fr}.row3 .field:first-child{grid-column:auto}.summary{padding:22px 18px}.line{grid-template-columns:76px 1fr auto;gap:16px}.line img{width:76px;height:98px}legend,.summary h2{font-size:24px}fieldset{margin-bottom:36px;padding-bottom:36px}.choice{padding:16px}.done dl{grid-template-columns:1fr;gap:3px}.done dd{margin-bottom:12px}.done .btn{max-width:none}}
+
+/* ---------- Readability: no text under 13px, 16px inputs (stops iOS zoom on focus) ---------- */
+.crumbs{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);margin:0 0 16px}.crumbs a{color:inherit}.crumbs b{color:var(--ink);font-weight:500}
+.demo-line{margin:14px 0 0;color:var(--muted);font-size:15px}
+.eyebrow{font-size:14px}
+label.l{font-size:14px}input[type=text],input[type=email],input[type=tel],select{font-size:16px}
+.ferr{font-size:13px}.choice b{font-size:15px}.choice small{font-size:13px}.choice span.p{font-size:14px}
+.hint,.promo-msg{font-size:13px}.apply{font-size:14px}
+.line p{font-size:15px}.line small{font-size:13px}.line .t{font-size:15px}.line .q{min-width:22px;height:22px;font-size:12px}
+.tot{font-size:14px}.tot.grand{font-size:15px}.btn{font-size:15px}.note{font-size:13px}.edit{font-size:14px}
+.done p,.done dl{font-size:15px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 </head>
@@ -49,7 +61,7 @@ input:focus,select:focus{border-color:var(--ink)}input[aria-invalid=true],select
 <div class="announcement">Complimentary shipping on orders over £100</div>
 <header class="header"><div class="nav-left"><a class="nav-link" href="index.html">← Back to store</a></div><a class="icon-btn" href="index.html" aria-label="Back to store"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a><a class="brand" href="index.html">STUDIO 01</a><div class="nav-right"><a class="utility" href="index.html" aria-label="Edit bag">Bag <span class="count" id="bagCount">(0)</span></a></div></header>
 <main class="wrap" id="main">
-  <div class="title"><p class="eyebrow">Demo checkout</p><h1 id="pageTitle" tabindex="-1">Checkout</h1></div>
+  <div class="title"><nav class="crumbs" aria-label="Progress"><a href="index.html">Bag</a><span aria-hidden="true">/</span><b aria-current="step">Checkout</b><span aria-hidden="true">/</span><span>Confirmation</span></nav><h1 id="pageTitle" tabindex="-1">Checkout</h1><p class="demo-line">Demo checkout. No payment is taken.</p></div>
   <div class="layout" id="layout">
     <form id="co" novalidate>
       <fieldset><legend>Contact</legend>
