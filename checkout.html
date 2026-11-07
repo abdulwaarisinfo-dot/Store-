@@ -166,15 +166,14 @@ function init(){
   const bad=Object.keys(RULES).filter(id=>!check(id));
   if(bad.length){$(bad[0]).focus();return}
   done=true;$("placeBtn").disabled=true;
-  const t=totals(),no="S01-"+Math.floor(100000+Math.random()*900000);
-  const g=id=>esc($(id).value.trim());
-  const addr=[g("address1"),g("address2"),g("city")+" "+g("postal"),g("country")].filter(x=>x.trim()).join("<br>");
+  const t=totals(),no="S01-"+Math.floor(100000+Math.random()*900000),v=id=>$(id).value.trim();
+  const order={no,ts:Date.now(),name:v("name"),email:v("email"),phone:v("phone"),addr:{a1:v("address1"),a2:v("address2"),city:v("city"),postal:v("postal"),country:v("country")},
+   ship:{k:t.m,n:SHIP[t.m].n,p:t.ship},pay:PAY[document.querySelector('input[name="pay"]:checked').value],
+   items:cart.map(x=>({name:x.name,img:x.img,size:x.size,color:x.color,qty:x.qty,price:x.price})),sub,disc:t.disc,discLabel:promo?promo.label:"",total:t.total};
+  try{sessionStorage.setItem("studio01_last_order",JSON.stringify(order))}catch(err){}
   try{localStorage.removeItem(LS)}catch(err){}
-  $("bagCount").textContent="(0)";
-  $("main").innerHTML=`<div class="done"><p class="eyebrow">Demo order · no payment taken</p><h1 id="pageTitle" tabindex="-1">Thank you, ${g("name").split(" ")[0]}.</h1><p>This was a demonstration checkout, so nothing has been charged or shipped. In the live store, a confirmation would be emailed to ${g("email")}.</p>
-  <dl><dt>Order number</dt><dd>${no}</dd><dt>Items</dt><dd>${count} · ${gbp(sub)}</dd>${t.disc?`<dt>Discount</dt><dd>−${gbp(t.disc)}</dd>`:""}<dt>Delivery</dt><dd>${SHIP[t.m].n} · ${t.ship?gbp(t.ship):"Free"}</dd><dt>Payment</dt><dd>${PAY[document.querySelector('input[name="pay"]:checked').value]}</dd><dt>Total</dt><dd><strong>${gbp(t.total)}</strong></dd><dt>Deliver to</dt><dd>${addr}</dd></dl>
-  <a class="btn" href="index.html">Continue shopping</a></div>`;
-  window.scrollTo({top:0});$("pageTitle").focus();
+  $("placeBtn").textContent="Placing order…";
+  location.href="confirmation.html";
  });
  totals();
 }
