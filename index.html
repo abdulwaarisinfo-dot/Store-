@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f4f3ef">
 <title>STUDIO 01 — Considered Everyday Clothing</title>
+<meta name="description" content="Studio 01 Collection 01: a small wardrobe of well-cut everyday clothing in natural, neutral tones. Menswear, womenswear and accessories.">
+<meta property="og:type" content="website"><meta property="og:title" content="STUDIO 01 — Considered Everyday Clothing"><meta property="og:description" content="A small wardrobe of well-cut everyday clothing in natural, neutral tones.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23171715'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23f4f3ef' font-family='Georgia,serif'%3E01%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
 <script>
 /* Entrance gate: plays on every fresh arrival, not when moving between pages of the store.
@@ -67,6 +70,24 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
 @media(max-width:700px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 12px}.quick-add{opacity:1;transform:none;height:38px}.statement{grid-template-columns:1fr;gap:16px;padding:56px var(--gutter)}
 .section-head{flex-direction:column;align-items:flex-start;gap:10px;padding:64px 0 20px}.collections{gap:8px;align-items:start}.coll small{display:none}.coll span{font-size:16px}.toolbar{flex-wrap:wrap;gap:12px}.categories{width:100%;gap:22px}.tools{width:100%}.tool-btn{width:100%;white-space:nowrap}.hero{padding-top:12px}.hero-media{aspect-ratio:4/4.1}.hero-actions{flex-direction:column;align-items:stretch;gap:8px}.hero-actions .btn-link{align-self:center;padding:12px}}
 
+/* ---------- Readability and structure polish ---------- */
+.hero-statement{font-size:16px;line-height:1.7}.section-head p{font-size:15px}
+.services{max-width:1600px;margin:0 auto;padding:0 var(--gutter)}
+.services>div{display:flex;justify-content:space-between;align-items:center;gap:20px 48px;flex-wrap:wrap;margin-top:64px;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.services ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:20px clamp(28px,5vw,80px)}
+.services li{display:grid;gap:2px}.services b{font-weight:500;font-size:15px}.services span{color:var(--muted);font-size:14px}
+.section-head{padding-top:88px}
+.category{padding:10px 0;font-size:14px}
+.result-count{margin:0;padding:0 0 20px;color:var(--muted);font-size:14px}
+.status{font-size:14px}
+.swatch{position:relative}.swatch:after{content:"";position:absolute;inset:-10px}
+.product-name,.price{font-size:15px}.rating{font-size:13px}.tag{font-size:12px}
+.quick-add{font-size:14px}.tool-btn{font-size:14px}.filter-panel label{font-size:14px}
+.coll small{display:block;margin-top:2px;color:var(--muted);font-size:14px}
+.cart-row small,.note,.avail,.guide table{font-size:13px}
+.statement p{font-size:16px}
+@media(max-width:700px){.services>div{margin-top:40px;padding:20px 0}.services ul{flex-direction:column;gap:14px}.coll small{display:block;font-size:13px}}
+
 /* ---------- Entrance gate ---------- */
 .gate{display:none}
 .gate-on .gate{display:contents}
@@ -95,6 +116,7 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
 </head>
 <body>
 <div class="gate" id="gate" aria-hidden="true"><div class="gate-panel l"></div><div class="gate-panel r"></div><div class="gate-word"><span><i style="--i:0">S</i></span><span><i style="--i:1">T</i></span><span><i style="--i:2">U</i></span><span><i style="--i:3">D</i></span><span><i style="--i:4">I</i></span><span><i style="--i:5">O</i></span><span><i style="--i:6">&nbsp;</i></span><span><i style="--i:7">0</i></span><span><i style="--i:8">1</i></span></div></div>
+<a class="skip" href="#shop">Skip to products</a>
 <div class="announcement">Complimentary shipping on orders over £100</div>
 <header class="header">
   <div class="nav-left"><a class="nav-link" href="#shop">Shop</a><a class="nav-link" href="#collections">Collections</a><a class="nav-link" href="info.html#about">About</a></div>
@@ -120,12 +142,21 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
   </picture></div>
 </section>
 
+<section class="services" aria-label="Delivery and collection"><div>
+  <ul>
+    <li><b>Free delivery over £100</b><span>Otherwise £5 standard</span></li>
+    <li><b>Standard in 3–5 working days</b><span>Express in 1–2 days, £12</span></li>
+    <li><b>Collect in store</b><span>Free, ready in 24 hours</span></li>
+  </ul>
+  <a class="btn-link" href="info.html#shipping">Shipping and returns</a>
+</div></section>
+
 <section class="section" id="collections" aria-labelledby="collH">
   <div class="section-head"><h2 id="collH">Collections</h2><p>Menswear, womenswear and accessories from Collection 01.</p></div>
   <div class="collections">
-    <button class="coll" onclick="pickCategory('Men')"><div><img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Men</span><small>View menswear</small></button>
-    <button class="coll" onclick="pickCategory('Women')"><div><img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Women</span><small>View womenswear</small></button>
-    <button class="coll" onclick="pickCategory('Accessories')"><div><img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Accessories</span><small>View accessories</small></button>
+    <button class="coll" onclick="pickCategory('Men')"><div><img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Men</span><small data-cat="Men">View menswear</small></button>
+    <button class="coll" onclick="pickCategory('Women')"><div><img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Women</span><small data-cat="Women">View womenswear</small></button>
+    <button class="coll" onclick="pickCategory('Accessories')"><div><img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy"></div><span>Accessories</span><small data-cat="Accessories">View accessories</small></button>
   </div>
 </section>
 
@@ -145,6 +176,7 @@ if(!rm&&(/[?&]gate/.test(q)||!internal))r.classList.add("gate-on")}catch(e){}})(
     <label><input type="checkbox" value="Sale" onchange="renderProducts()"> On sale</label>
     <label>Sort by <select id="sortSelect" onchange="renderProducts()"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label>
   </div>
+  <p class="result-count" id="resultCount" aria-live="polite"></p>
   <div class="status" id="wishStatus"><span>Showing your wishlist</span><button onclick="showWishlist()">Show all products</button></div>
   <section class="product-grid" id="productGrid" aria-live="polite"></section>
 </main>
@@ -189,6 +221,7 @@ const products=[
 {id:7,name:"Canvas Carryall",category:"Accessories",price:32,old:null,rating:4.7,reviews:44,tag:"",img:"https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85",sizes:[],colors:[C("Tan","#b6a58d"),C("Charcoal","#34352f")],out:[]},
 {id:8,name:"Minimal Leather Sneaker",category:"Accessories",price:110,old:null,rating:4.8,reviews:67,tag:"",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",sizes:SH,colors:[C("Bone","#e8e5de"),C("Greige","#b8b3a9")],out:["UK 8|Bone","UK 11|Greige"]}
 ];
+document.querySelectorAll(".coll small[data-cat]").forEach(el=>{const n=products.filter(p=>p.category===el.dataset.cat).length;el.textContent=n+(n===1?" piece":" pieces")});
 const LS="studio01_cart_v1",MAXQ=10;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -209,6 +242,7 @@ function renderProducts(){
  if(checks.includes("Sale"))list=list.filter(p=>p.old);
  const sort=$("sortSelect")?.value||"featured";
  if(sort==="low")list.sort((a,b)=>a.price-b.price);if(sort==="high")list.sort((a,b)=>b.price-a.price);
+ $("resultCount").textContent=list.length+(list.length===1?" piece":" pieces");
  const grid=$("productGrid");
  if(!list.length){grid.innerHTML=wishOnly?'<div class="empty">Your wishlist is empty. Use the heart on any product to save it.</div>':'<div class="empty">No pieces found. Try another search or category.</div>';return}
  grid.innerHTML=list.map(p=>`<article class="product">
