@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#f4f3ef">
+<title>Product — STUDIO 01</title>
+<meta name="description" content="Studio 01 Collection 01.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23171715'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23f4f3ef' font-family='Georgia,serif'%3E01%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="shop.css">
+</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="announcement">Complimentary shipping on orders over £100</div>
+<header class="header"><div class="nav-left"><a class="nav-link" href="collection.html?c=Men">Men</a><a class="nav-link" href="collection.html?c=Women">Women</a><a class="nav-link" href="collection.html?c=Accessories">Accessories</a><a class="nav-link" href="info.html#about">About</a></div>
+<a class="icon-btn" href="index.html" aria-label="Back to home"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a><a class="brand" href="index.html">STUDIO 01</a>
+<div class="nav-right"><button type="button" class="utility" id="bagBtn">Bag <span class="count" id="bagCount">(0)</span></button></div></header>
+<main class="page" id="main">
+ <nav class="crumbs" aria-label="Breadcrumb" id="crumbs"></nav>
+ <div id="pdp"></div>
+ <section class="more" id="relWrap" hidden aria-labelledby="relT"><h2 id="relT">You may also like</h2><div class="product-grid" id="rel" style="padding-bottom:0"></div></section>
+</main>
+<footer class="footer">
+  <div class="footer-grid">
+    <div><a class="brand" href="index.html">STUDIO 01</a><p class="footer-about">Considered everyday clothing in natural, neutral tones. A small collection, made to be worn often.</p></div>
+    <div><h3>Shop</h3><ul><li><a href="collection.html?c=All">All products</a></li><li><a href="collection.html?c=Men">Men</a></li><li><a href="collection.html?c=Women">Women</a></li><li><a href="collection.html?c=Accessories">Accessories</a></li></ul></div>
+    <div><h3>Support</h3><ul><li><a href="info.html#shipping">Shipping and returns</a></li><li><a href="info.html#contact">Contact</a></li></ul></div>
+    <div><h3>Studio 01</h3><ul><li><a href="info.html#about">About</a></li><li><a href="info.html#privacy">Privacy policy</a></li><li><a href="info.html#terms">Terms and conditions</a></li></ul></div>
+  </div>
+  <div class="footer-base"><span>© 2026 STUDIO 01. Demo store: no real orders or payments.</span><span>Contact details to be added</span></div>
+</footer>
+<script src="data.js"></script><script src="bag.js"></script>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const id=parseInt(new URLSearchParams(location.search).get("id"),10),p=products.find(x=>x.id===id);
+ const root=$("pdp");
+ if(!p){document.title="Product not found — STUDIO 01";$("crumbs").innerHTML='<a href="index.html">Home</a>';
+  root.innerHTML='<div class="lost"><h1>Product not found</h1><p>We could not find that piece. It may have been removed.</p><a class="checkout" style="width:auto;padding:0 28px;display:inline-flex" href="collection.html?c=All">VIEW ALL PRODUCTS</a></div>';return}
+ const C=CATS[p.category];
+ document.title=p.name+" — STUDIO 01";
+ document.querySelector('meta[name=description]').content=p.name+", "+fmtMoney(p.price)+". "+C.title+" from Studio 01 Collection 01.";
+ document.querySelectorAll(".nav-link").forEach(a=>{if(a.getAttribute("href")==="collection.html?c="+p.category)a.setAttribute("aria-current","page")});
+ $("crumbs").innerHTML=`<a href="index.html">Home</a><span aria-hidden="true">/</span><a href="collection.html?c=${p.category}">${C.title}</a><span aria-hidden="true">/</span><b aria-current="page">${escHTML(p.name)}</b>`;
+ const sel={size:null,color:null,qty:1},MAXQ=10,WL="studio01_wishlist_v1";
+ const out=(s,c)=>p.out.includes(s+"|"+c);
+ const sizeOff=s=>sel.color?out(s,sel.color):p.colors.every(c=>out(s,c.n));
+ const colorOff=c=>sel.size?out(sel.size,c):(p.sizes.length>0&&p.sizes.every(s=>out(s,c)));
+ const FL=["24.5","25.4","26.2","27.1","27.9","28.8"],GA=[["XS","84–89","70–75"],["S","90–95","76–81"],["M","96–101","82–87"],["L","102–107","88–93"],["XL","108–115","94–101"],["XXL","116–123","102–109"]];
+ const guide=()=>p.sizes[0]&&p.sizes[0].startsWith("UK")
+  ?`<table><tr><th>Size</th><th>EU (approx.)</th><th>Foot length</th></tr>${p.sizes.map((s,i)=>`<tr><td>${s}</td><td>${39+i}</td><td>${FL[i]} cm</td></tr>`).join("")}</table>`
+  :`<table><tr><th>Size</th><th>Chest (cm)</th><th>Waist (cm)</th></tr>${GA.filter(r=>p.sizes.includes(r[0])).map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</table><p style="margin-top:10px">Body measurements. Between sizes? Size up for a relaxed fit.</p>`;
+ const off=p.old?Math.round((1-p.price/p.old)*100):0;
+ root.innerHTML=`<div class="pdp"><div class="pdp-media"><img src="${p.img}" alt="${escHTML(p.name)}"></div>
+ <div class="pdp-info"><h1>${escHTML(p.name)}</h1>
+ <p class="pdp-price">${fmtMoney(p.price)}${p.old?`<del>${fmtMoney(p.old)}</del><span class="off">-${off}%</span>`:""}</p>
+ <p class="rating">★ ${p.rating.toFixed(1)} · ${p.reviews} reviews${p.tag==="New in"?" · New in":""}</p>
+ <div class="opt"><div class="opt-head"><span>Colour: <b id="cLbl">Select a colour</b></span></div><div class="opt-row" role="group" aria-label="Colour">${p.colors.map(c=>`<button type="button" class="color-btn" data-c="${escHTML(c.n)}" aria-pressed="false"><i style="background:${c.h}"></i>${escHTML(c.n)}</button>`).join("")}</div></div>
+ ${p.sizes.length?`<div class="opt"><div class="opt-head"><span>Size: <b id="sLbl">Select a size</b></span></div><div class="opt-row" role="group" aria-label="Size">${p.sizes.map(s=>`<button type="button" class="size-btn" data-s="${escHTML(s)}" aria-pressed="false">${escHTML(s)}</button>`).join("")}</div></div>`:`<div class="opt"><div class="opt-head"><span>Size: <b>One size</b></span></div></div>`}
+ <p class="avail" id="avail" aria-live="polite">Select options to check availability</p>
+ <div class="opt"><div class="opt-head"><span>Quantity</span></div><div class="qty"><button type="button" id="qm" aria-label="Decrease quantity">−</button><span id="qv" aria-live="polite">1</span><button type="button" id="qp" aria-label="Increase quantity">+</button></div></div>
+ <p class="err" id="err" role="alert"></p>
+ <div class="pdp-actions"><button type="button" class="checkout" id="add">ADD TO BAG</button><button type="button" class="ghost" id="wish" aria-pressed="false">Save to wishlist</button></div>
+ <div class="acc">${p.sizes.length?`<details><summary>Size guide</summary><div class="in">${guide()}</div></details>`:""}
+ <details><summary>Delivery and collection</summary><div class="in"><ul><li>Free delivery on orders over £100, otherwise £5</li><li>Standard 3–5 working days, express 1–2 working days (£12)</li><li>Collect in store: free, ready in 24 hours</li></ul><p>This is a demo store, so nothing is shipped. <a href="info.html#shipping">Shipping and returns</a></p></div></details></div>
+ </div></div>`;
+ function sync(){
+  document.querySelectorAll(".color-btn").forEach(b=>{const n=b.dataset.c,o=colorOff(n),on=sel.color===n;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);if(o){b.setAttribute("aria-disabled","true");b.title="Sold out in this size"}else{b.removeAttribute("aria-disabled");b.removeAttribute("title")}});
+  document.querySelectorAll(".size-btn").forEach(b=>{const n=b.dataset.s,o=sizeOff(n),on=sel.size===n;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);if(o){b.setAttribute("aria-disabled","true");b.title="Sold out in this colour"}else{b.removeAttribute("aria-disabled");b.removeAttribute("title")}});
+  $("cLbl").textContent=sel.color||"Select a colour";if($("sLbl"))$("sLbl").textContent=sel.size||"Select a size";
+  $("avail").textContent=sel.color&&(sel.size||!p.sizes.length)?"In stock":"Select options to check availability";
+  $("qv").textContent=sel.qty;
+ }
+ root.addEventListener("click",e=>{
+  const c=e.target.closest(".color-btn"),s=e.target.closest(".size-btn");
+  if(c&&c.getAttribute("aria-disabled")!=="true"){sel.color=sel.color===c.dataset.c?null:c.dataset.c;$("err").textContent="";sync()}
+  if(s&&s.getAttribute("aria-disabled")!=="true"){sel.size=sel.size===s.dataset.s?null:s.dataset.s;$("err").textContent="";sync()}
+ });
+ $("qm").onclick=()=>{sel.qty=Math.max(1,sel.qty-1);sync()};$("qp").onclick=()=>{sel.qty=Math.min(MAXQ,sel.qty+1);sync()};
+ $("add").onclick=()=>{
+  const miss=[];if(!sel.color)miss.push("a colour");if(p.sizes.length&&!sel.size)miss.push("a size");
+  if(miss.length){$("err").textContent="Please select "+miss.join(" and ")+".";return}
+  Bag.add({key:[p.id,sel.size||"",sel.color].join("|"),id:p.id,name:p.name,price:p.price,img:p.img,size:sel.size||"One size",color:sel.color,qty:sel.qty});
+  $("err").textContent="";Bag.open();
+ };
+ const wl=()=>{try{const a=JSON.parse(localStorage.getItem(WL)||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}};
+ function wsync(){const on=wl().includes(p.id);$("wish").textContent=on?"Saved to wishlist":"Save to wishlist";$("wish").setAttribute("aria-pressed",on)}
+ $("wish").onclick=()=>{let a=wl();a=a.includes(p.id)?a.filter(x=>x!==p.id):[...a,p.id];try{localStorage.setItem(WL,JSON.stringify(a))}catch(e){}wsync()};
+ sync();wsync();
+ const rel=products.filter(x=>x.id!==p.id&&x.category===p.category).concat(products.filter(x=>x.id!==p.id&&x.category!==p.category)).slice(0,4);
+ $("rel").innerHTML=rel.map(shopCard).join("");$("relWrap").hidden=false;
+})();
+</script>
+</body></html>
