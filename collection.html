@@ -27,24 +27,27 @@
   </div>
   <div class="footer-base"><span>© 2026 STUDIO 01. Demo store: no real orders or payments.</span><span>Contact details to be added</span></div>
 </footer>
-<script src="data.js"></script><script src="bag.js"></script>
+<script src="data.js"></script><script src="bag.js"></script><script src="nav.js"></script>
 <script>
 (function(){
  const $=id=>document.getElementById(id);
- const q=new URLSearchParams(location.search).get("c"),cat=CATS[q]?q:"All",info=CATS[cat];
- document.title=info.title+" — STUDIO 01";
- $("cTitle").textContent=info.title;$("crumbNow").textContent=info.title;$("cBlurb").textContent=info.blurb;
+ const P=new URLSearchParams(location.search),qs=(P.get("q")||"").trim().slice(0,60),cq=P.get("c"),cat=qs?"All":(CATS[cq]?cq:"All"),info=CATS[cat];
+ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ document.title=(qs?"Search: "+qs:info.title)+" — STUDIO 01";
+ $("cTitle").textContent=qs?"Results for “"+qs+"”":info.title;$("crumbNow").textContent=qs?"Search":info.title;$("cBlurb").textContent=qs?"":info.blurb;
  $("cImg").src=info.img;
+ if(qs){document.querySelector(".c-head").classList.add("s");$("cTabs").hidden=true}
  $("cTabs").innerHTML=["All","Men","Women","Accessories"].map(k=>`<a href="collection.html?c=${k}"${k===cat?' aria-current="page"':""}>${CATS[k].title}</a>`).join("");
  document.querySelectorAll(".nav-link").forEach(a=>{if(a.getAttribute("href")==="collection.html?c="+cat)a.setAttribute("aria-current","page")});
  function render(){
-  let list=products.filter(p=>cat==="All"||p.category===cat);
+  let list=qs?products.filter(p=>searchMatch(p,qs)):products.filter(p=>cat==="All"||p.category===cat);
   if($("fNew").checked)list=list.filter(p=>p.tag==="New in");
   if($("fSale").checked)list=list.filter(p=>p.old);
   const s=$("fSort").value;
   if(s==="low")list.sort((a,b)=>a.price-b.price);else if(s==="high")list.sort((a,b)=>b.price-a.price);else if(s==="rate")list.sort((a,b)=>b.rating-a.rating);
   $("cCount").textContent=list.length+(list.length===1?" piece":" pieces");
-  $("grid").innerHTML=list.length?list.map(shopCard).join(""):'<p class="empty">No pieces match these filters.</p>';
+  $("grid").innerHTML=list.length?list.map(shopCard).join(""):(qs&&!$("fNew").checked&&!$("fSale").checked?'<p class="empty">No pieces match “'+esc(qs)+'”. Try another word, or browse <a href="collection.html?c=Men">Men</a>, <a href="collection.html?c=Women">Women</a> or <a href="collection.html?c=Accessories">Accessories</a>.</p>':'<p class="empty">No pieces match these filters.</p>');
+  if(qs)$("cBlurb").innerHTML=list.length+(list.length===1?" piece found. ":" pieces found. ")+'<a href="collection.html?c=All">Clear search</a>';
  }
  ["fNew","fSale","fSort"].forEach(id=>$(id).addEventListener("change",render));
  render();
