@@ -27,3 +27,10 @@ function shopCard(p){
  <div class="product-meta"><div class="rating">★ ${p.rating.toFixed(1)} <span>(${p.reviews})</span></div><p class="product-name"><a href="product.html?id=${p.id}">${escHTML(p.name)}</a></p><p class="price">${fmtMoney(p.price)} ${p.old?`<del class="was">${fmtMoney(p.old)}</del>`:""}</p>
  <div class="swatches">${p.colors.map(c=>`<span class="swatch" style="background:${c.h}" title="${escHTML(c.n)}"></span>`).join("")}</div></div></article>`;
 }
+
+/* search: every word typed must match the start of a word in name, collection, colour, tag or "sale" */
+function searchMatch(p,q){
+ const words=[p.name,p.category,CATS[p.category].title,p.tag||"",p.old?"sale":"",...p.colors.map(c=>c.n)].join(" ").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+ const t=String(q).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+ return t.length>0&&t.every(x=>words.some(w=>w.startsWith(x)));
+}
