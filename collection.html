@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#f4f3ef">
+<title>Shop — STUDIO 01</title>
+<meta name="description" content="Shop Studio 01 Collection 01: menswear, womenswear and accessories.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23171715'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23f4f3ef' font-family='Georgia,serif'%3E01%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="shop.css">
+</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="announcement">Complimentary shipping on orders over £100</div>
+<header class="header"><div class="nav-left"><a class="nav-link" href="collection.html?c=Men">Men</a><a class="nav-link" href="collection.html?c=Women">Women</a><a class="nav-link" href="collection.html?c=Accessories">Accessories</a><a class="nav-link" href="info.html#about">About</a></div>
+<a class="icon-btn" href="index.html" aria-label="Back to home"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a><a class="brand" href="index.html">STUDIO 01</a>
+<div class="nav-right"><button type="button" class="utility" id="bagBtn">Bag <span class="count" id="bagCount">(0)</span></button></div></header>
+<main class="page" id="main">
+ <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><b id="crumbNow" aria-current="page">All products</b></nav>
+ <div class="c-head"><div><h1 id="cTitle">All products</h1><p id="cBlurb"></p></div><div class="c-media"><img id="cImg" alt="" src=""></div></div>
+ <nav class="c-tabs" aria-label="Collections" id="cTabs"></nav>
+ <div class="c-tools"><p id="cCount" aria-live="polite"></p><div class="c-filters"><label><input type="checkbox" id="fNew"> New in</label><label><input type="checkbox" id="fSale"> On sale</label><label>Sort <select id="fSort"><option value="feat">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="rate">Top rated</option></select></label></div></div>
+ <section class="product-grid" id="grid" aria-label="Products"></section>
+ <section class="more" id="more" aria-labelledby="moreT"><h2 id="moreT">More collections</h2><div class="more-grid" id="moreGrid"></div></section>
+</main>
+<footer class="footer">
+  <div class="footer-grid">
+    <div><a class="brand" href="index.html">STUDIO 01</a><p class="footer-about">Considered everyday clothing in natural, neutral tones. A small collection, made to be worn often.</p></div>
+    <div><h3>Shop</h3><ul><li><a href="collection.html?c=All">All products</a></li><li><a href="collection.html?c=Men">Men</a></li><li><a href="collection.html?c=Women">Women</a></li><li><a href="collection.html?c=Accessories">Accessories</a></li></ul></div>
+    <div><h3>Support</h3><ul><li><a href="info.html#shipping">Shipping and returns</a></li><li><a href="info.html#contact">Contact</a></li></ul></div>
+    <div><h3>Studio 01</h3><ul><li><a href="info.html#about">About</a></li><li><a href="info.html#privacy">Privacy policy</a></li><li><a href="info.html#terms">Terms and conditions</a></li></ul></div>
+  </div>
+  <div class="footer-base"><span>© 2026 STUDIO 01. Demo store: no real orders or payments.</span><span>Contact details to be added</span></div>
+</footer>
+<script src="data.js"></script><script src="bag.js"></script>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const q=new URLSearchParams(location.search).get("c"),cat=CATS[q]?q:"All",info=CATS[cat];
+ document.title=info.title+" — STUDIO 01";
+ $("cTitle").textContent=info.title;$("crumbNow").textContent=info.title;$("cBlurb").textContent=info.blurb;
+ $("cImg").src=info.img;
+ $("cTabs").innerHTML=["All","Men","Women","Accessories"].map(k=>`<a href="collection.html?c=${k}"${k===cat?' aria-current="page"':""}>${CATS[k].title}</a>`).join("");
+ document.querySelectorAll(".nav-link").forEach(a=>{if(a.getAttribute("href")==="collection.html?c="+cat)a.setAttribute("aria-current","page")});
+ function render(){
+  let list=products.filter(p=>cat==="All"||p.category===cat);
+  if($("fNew").checked)list=list.filter(p=>p.tag==="New in");
+  if($("fSale").checked)list=list.filter(p=>p.old);
+  const s=$("fSort").value;
+  if(s==="low")list.sort((a,b)=>a.price-b.price);else if(s==="high")list.sort((a,b)=>b.price-a.price);else if(s==="rate")list.sort((a,b)=>b.rating-a.rating);
+  $("cCount").textContent=list.length+(list.length===1?" piece":" pieces");
+  $("grid").innerHTML=list.length?list.map(shopCard).join(""):'<p class="empty">No pieces match these filters.</p>';
+ }
+ ["fNew","fSale","fSort"].forEach(id=>$(id).addEventListener("change",render));
+ render();
+ $("moreGrid").innerHTML=["Men","Women","Accessories"].filter(k=>k!==cat).slice(0,3).map(k=>{const n=products.filter(p=>p.category===k).length;return `<a href="collection.html?c=${k}"><div class="m"><img src="${CATS[k].img}" alt="" loading="lazy"></div><b>${CATS[k].title}</b><span>${n} ${n===1?"piece":"pieces"}</span></a>`}).join("");
+ $("moreGrid").style.setProperty("--n",$("moreGrid").children.length);
+ if(cat==="All")$("moreT").textContent="Shop by collection";
+})();
+</script>
+</body></html>
