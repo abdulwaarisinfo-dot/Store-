@@ -6,6 +6,10 @@
 <meta name="theme-color" content="#f4f3ef">
 <title>STUDIO 01 — Considered Everyday Clothing</title>
 <link rel="stylesheet" href="styles.css">
+<script>
+/* Gate plays once per visit, never with reduced motion */
+try{if(!sessionStorage.getItem("s01-gate")&&!matchMedia("(prefers-reduced-motion:reduce)").matches)document.documentElement.classList.add("gate-on")}catch(e){}
+</script>
 <style>
 .search-panel{display:none;padding:12px var(--gutter);border-bottom:1px solid var(--line)}.search-panel.open{display:block}
 .search-panel input{width:100%;border:0;background:transparent;outline:0;font:400 22px var(--serif)}
@@ -59,9 +63,33 @@
 @media(max-width:1000px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr;gap:28px}.hero-media{order:-1;height:auto;aspect-ratio:4/3.4}.hero h1{margin-bottom:20px}}
 @media(max-width:700px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 12px}.quick-add{opacity:1;transform:none;height:38px}.statement{grid-template-columns:1fr;gap:16px;padding:56px var(--gutter)}
 .section-head{flex-direction:column;align-items:flex-start;gap:10px;padding:64px 0 20px}.collections{gap:8px;align-items:start}.coll small{display:none}.coll span{font-size:16px}.toolbar{flex-wrap:wrap;gap:12px}.categories{width:100%;gap:22px}.tools{width:100%}.tool-btn{width:100%;white-space:nowrap}.hero{padding-top:12px}.hero-media{aspect-ratio:4/4.1}.hero-actions{flex-direction:column;align-items:stretch;gap:8px}.hero-actions .btn-link{align-self:center;padding:12px}}
+
+/* ---------- Entrance gate ---------- */
+.gate{display:none}
+.gate-on .gate{display:block;position:fixed;inset:0;z-index:100;pointer-events:auto;cursor:pointer}
+.gate-on,.gate-on body{overflow:hidden}
+.gate-door{position:absolute;top:0;bottom:0;width:50%;background:var(--ink);overflow:hidden;will-change:transform;animation:doorsOpen 1.45s cubic-bezier(.76,0,.18,1) 1.35s forwards}
+.gate-door.l{left:0;--x:-100%}.gate-door.r{right:0;--x:100%}
+.gate-door:after{content:"";position:absolute;top:0;bottom:0;width:1px;background:rgba(244,243,239,.22)}
+.gate-door.l:after{right:0}.gate-door.r:after{left:0}
+.gate-mark{position:absolute;top:0;bottom:0;width:100vw;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;color:var(--paper)}
+.gate-door.l .gate-mark{left:0}.gate-door.r .gate-mark{right:0}
+.gate-mark b{font:500 clamp(22px,3.4vw,44px)/1 var(--sans);letter-spacing:.42em;padding-left:.42em;white-space:nowrap;opacity:0;animation:gateIn 1s var(--ease) .25s forwards}
+.gate-mark small{font:400 12px var(--sans);letter-spacing:.14em;color:rgba(244,243,239,.55);opacity:0;animation:gateIn 1s var(--ease) .6s forwards}
+@keyframes gateIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes doorsOpen{to{transform:translate3d(var(--x),0,0)}}
+.gate.done{display:none!important}
+/* page settles in as the doors part */
+.gate-on .hero-media img{animation:reveal 1.8s var(--ease) 1.5s both}
+.gate-on .hero h1,.gate-on .hero-statement,.gate-on .hero-actions{animation:reveal 1.2s var(--ease) 1.9s both}
+@media(max-width:700px){.gate-mark b{letter-spacing:.3em;padding-left:.3em}}
 </style>
 </head>
 <body>
+<div class="gate" id="gate" aria-hidden="true">
+  <div class="gate-door l"><div class="gate-mark"><b>STUDIO 01</b><small>Collection 01</small></div></div>
+  <div class="gate-door r"><div class="gate-mark"><b>STUDIO 01</b><small>Collection 01</small></div></div>
+</div>
 <div class="announcement">Complimentary shipping on orders over £100</div>
 <header class="header">
   <div class="nav-left"><a class="nav-link" href="#shop">Shop</a><a class="nav-link" href="#collections">Collections</a><a class="nav-link" href="info.html#about">About</a></div>
@@ -241,6 +269,16 @@ window.addEventListener("storage",e=>{if(e.key===LS){cart=loadCart();updateCart(
 window.addEventListener("pageshow",()=>{cart=loadCart();updateCart()});
 const qc=new URLSearchParams(location.search).get("c");if(["Men","Women","Accessories"].includes(qc))category=qc;document.querySelectorAll(".category").forEach(x=>x.classList.toggle("active",x.dataset.category===category));
 renderProducts();updateCart();syncWish();
+/* ---------- Entrance gate ---------- */
+(function(){
+ const g=document.getElementById("gate"),root=document.documentElement;if(!g||!root.classList.contains("gate-on"))return;
+ let ended=false;
+ function end(){if(ended)return;ended=true;try{sessionStorage.setItem("s01-gate","1")}catch(e){}g.classList.add("done");root.classList.remove("gate-on")}
+ function skip(){ if(ended)return; g.querySelectorAll(".gate-door").forEach(d=>{d.style.animationDelay="0s";d.style.animationDuration=".7s"});setTimeout(end,720)}
+ g.querySelector(".gate-door.r").addEventListener("animationend",e=>{if(e.animationName==="doorsOpen")end()});
+ g.addEventListener("click",skip);document.addEventListener("keydown",skip,{once:true});
+ setTimeout(end,4200);
+})();
 </script>
 </body>
 </html>
