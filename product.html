@@ -3,6 +3,9 @@
 <title>Product — STUDIO 01</title>
 <meta name="description" content="Studio 01 Collection 01.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23171715'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23f4f3ef' font-family='Georgia,serif'%3E01%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/newsreader-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="shop.css">
 </head><body>
 <a class="skip" href="#main">Skip to content</a>
@@ -34,6 +37,9 @@
   root.innerHTML='<div class="lost"><h1>Product not found</h1><p>We could not find that piece. It may have been removed.</p><a class="checkout" style="width:auto;padding:0 28px;display:inline-flex" href="collection.html?c=All">VIEW ALL PRODUCTS</a></div>';return}
  const C=CATS[p.category];
  document.title=p.name+" — STUDIO 01";
+ const ld=document.createElement("script");ld.type="application/ld+json";
+ ld.textContent=JSON.stringify({"@context":"https://schema.org","@type":"Product",name:p.name,image:[p.img],description:p.name+". "+CATS[p.category].title+" from Studio 01 Collection 01.",brand:{"@type":"Brand",name:"STUDIO 01"},offers:{"@type":"Offer",priceCurrency:"GBP",price:p.price.toFixed(2),availability:"https://schema.org/InStock",url:location.href.split("#")[0]}});
+ document.head.appendChild(ld);
  document.querySelector('meta[name=description]').content=p.name+", "+fmtMoney(p.price)+". "+C.title+" from Studio 01 Collection 01.";
  document.querySelectorAll(".nav-link").forEach(a=>{if(a.getAttribute("href")==="collection.html?c="+p.category)a.setAttribute("aria-current","page")});
  $("crumbs").innerHTML=`<a href="index.html">Home</a><span aria-hidden="true">/</span><a href="collection.html?c=${p.category}">${C.title}</a><span aria-hidden="true">/</span><b aria-current="page">${escHTML(p.name)}</b>`;
