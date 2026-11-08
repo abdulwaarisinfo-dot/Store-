@@ -23,7 +23,7 @@ const fmtMoney=n=>"£"+n.toFixed(0);
 /* product card used on collection and product pages */
 function shopCard(p){
  const tag=p.old?'<span class="tag">-'+Math.round((1-p.price/p.old)*100)+'%</span>':p.tag==="New in"?'<span class="tag">New in</span>':"";
- return `<article class="product"><div class="photo-wrap"><a class="photo-link" href="product.html?id=${p.id}" aria-label="View ${escHTML(p.name)}"><img src="${p.img}" alt="${escHTML(p.name)}" loading="lazy" decoding="async"></a>${tag}</div>
+ return `<article class="product"><div class="photo-wrap"><a class="photo-link" href="product.html?id=${p.id}" aria-label="View ${escHTML(p.name)}"><img src="${p.img}" srcset="${imgSet(p.img)}" sizes="${IMG_SIZES}" alt="${escHTML(p.name)}" loading="lazy" decoding="async"></a>${tag}</div>
  <div class="product-meta"><div class="rating">★ ${p.rating.toFixed(1)} <span>(${p.reviews})</span></div><p class="product-name"><a href="product.html?id=${p.id}">${escHTML(p.name)}</a></p><p class="price">${fmtMoney(p.price)} ${p.old?`<del class="was">${fmtMoney(p.old)}</del>`:""}</p>
  <div class="swatches">${p.colors.map(c=>`<span class="swatch" style="background:${c.h}" title="${escHTML(c.n)}"></span>`).join("")}</div></div></article>`;
 }
@@ -34,3 +34,9 @@ function searchMatch(p,q){
  const t=String(q).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
  return t.length>0&&t.every(x=>words.some(w=>w.startsWith(x)));
 }
+
+/* responsive photos: same crop, three widths, so phones download far less */
+function imgSet(u){return [400,600,900].map(w=>{const x=new URL(u),w0=+x.searchParams.get("w"),h0=x.searchParams.get("h");x.searchParams.set("w",w);if(h0)x.searchParams.set("h",Math.round(w*h0/w0));return x.href+" "+w+"w"}).join(", ")}
+const IMG_SIZES="(max-width:700px) 50vw, (max-width:1100px) 33vw, 25vw";
+/* if a photo cannot load, show the clean sand block instead of a broken-image icon */
+document.addEventListener("error",e=>{const t=e.target;if(t&&t.tagName==="IMG")t.style.visibility="hidden"},true);
