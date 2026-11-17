@@ -16,6 +16,7 @@ A demo clothing store built with plain HTML, CSS and JavaScript. No build step a
 - `data.js`: the product catalogue, collection details and search. Edit products here.
 - `styles.css`: design tokens, header, footer and buttons
 - `shop.css`: styles for collection and product pages
+- `premium.css`: the premium design layer (type, spacing, dark footer, buttons). Loaded last on every page.
 - `bag.js`: the bag drawer on collection and product pages (same storage as the home page)
 - `nav.js`: mobile menu and live search for every page except the home page
 
